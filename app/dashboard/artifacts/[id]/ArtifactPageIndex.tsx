@@ -5,12 +5,18 @@ import { withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor, Descendant } from "slate";
 import useRenderElement from "@/src/lib/editor/hooks/useRenderElement";
+import { MECP } from "@/src/ui/components/mainEditor/MECP";
+import onKeyDown from "@/src/lib/editor/handlers/onKeyDown";
+import { useMECPStore } from "@/src/lib/stores/mainEditorCommandPanel";
 
 const initialValue: Descendant[] = [
   { type: "paragraph", align: "left", children: [{ text: "" }] },
 ];
 
 const ArtifactPageIndex = (_p: { id: string }) => {
+  // Pull states from MECP store
+  const { openMecp } = useMECPStore();
+
   // Initialize Editor Instance
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
@@ -38,7 +44,12 @@ const ArtifactPageIndex = (_p: { id: string }) => {
         <Editable
           className="border-0 outline-0"
           renderElement={renderElement}
+          onKeyDown={(e) => {
+            onKeyDown(e, editor, { openMecp });
+          }}
         />
+
+        <MECP />
       </Slate>
     </div>
   );
