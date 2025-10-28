@@ -1,6 +1,6 @@
 import { KeyboardEvent } from "react";
 import { MainEditor } from "../../types/slate";
-import { ParagraphElementType } from "../../types/slate-elements";
+import { RegisteredElement } from "../../types/slate-elements";
 import isElementDefault from "../utils/isElementDefault";
 import { MainEditorCommandPanelStore } from "../../stores/mainEditorCommandPanel";
 import { HOTKEYS } from "../../configs/hotkeys";
@@ -10,7 +10,7 @@ export const mecpHandler = (
   e: KeyboardEvent<HTMLDivElement>,
   editor: MainEditor,
   openMecp: MainEditorCommandPanelStore["openMecp"],
-  cbe?: ParagraphElementType
+  cbe?: RegisteredElement
 ) => {
   if (!cbe) return;
 

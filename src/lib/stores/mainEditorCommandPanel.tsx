@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { MainEditor } from "../types/slate";
+import { LinkElementType } from "../types/slate-elements";
 
 export interface MainEditorCommandPanelStore {
   /**
@@ -48,6 +49,41 @@ export interface MainEditorCommandPanelStore {
    * @returns void
    */
   closeMecp: () => void;
+
+  /**
+   * Link Injector Dialog `open` state
+   */
+  lidOpen: boolean;
+
+  /**
+   *
+   * `lidOpen` setter, prefer `openLid` and `closeLid` for opening/closing instead
+   *
+   * @param lidOpen boolean
+   * @returns void
+   */
+  setLidOpen: (lidOpen: boolean) => void;
+
+  /**
+   * Selected LinkElement, used to update existing link
+   */
+  selectedLink: LinkElementType | null;
+
+  /**
+   *
+   * Helper function to open LID
+   *
+   * @param editor MainEditor
+   * @param selectedLink optional
+   * @returns void
+   */
+  openLid: (editor: MainEditor, selectedLink?: LinkElementType) => void;
+
+  /**
+   * Helper functio to close LID and set related field back to default value
+   * @returns void
+   */
+  closeLid: () => void;
 }
 
 export const useMECPStore = create<MainEditorCommandPanelStore>((set) => {
@@ -60,5 +96,15 @@ export const useMECPStore = create<MainEditorCommandPanelStore>((set) => {
 
     openMecp: (editor) => set({ editor, mecpOpen: true }),
     closeMecp: () => set({ mecpOpen: false, editor: undefined }),
+
+    lidOpen: false,
+    setLidOpen: (lidOpen) => set({ lidOpen }),
+
+    selectedLink: null,
+
+    openLid: (editor, selectedLink) =>
+      set({ editor, selectedLink, lidOpen: true }),
+    closeLid: () =>
+      set({ editor: undefined, selectedLink: null, lidOpen: false }),
   };
 });

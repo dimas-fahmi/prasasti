@@ -22,6 +22,7 @@ import { motion } from "motion/react";
 import { useDashboardStore } from "@/src/lib/stores/dashboardStore";
 import { MainEditor } from "@/src/lib/types/slate";
 import { Separator } from "@/src/ui/shadcn/components/ui/separator";
+import { useMECPStore } from "@/src/lib/stores/mainEditorCommandPanel";
 
 const markButtons = [
   {
@@ -124,6 +125,9 @@ const MainEditorToolbar = ({ isTyping }: { isTyping: boolean }) => {
   // Get Main Container Layout Width
   const { mainWidth } = useDashboardStore();
 
+  // Pull states from MECP store
+  const { openLid } = useMECPStore();
+
   return (
     <motion.div
       initial={{ y: 100 }}
@@ -162,7 +166,12 @@ const MainEditorToolbar = ({ isTyping }: { isTyping: boolean }) => {
         <Separator orientation="vertical" />
 
         {/* Inserts */}
-        <ToolbarButton icon={LinkIcon} />
+        <ToolbarButton
+          icon={LinkIcon}
+          onClick={() => {
+            openLid(editor);
+          }}
+        />
         <ToolbarButton icon={ImageIcon} />
 
         <Separator orientation="vertical" />

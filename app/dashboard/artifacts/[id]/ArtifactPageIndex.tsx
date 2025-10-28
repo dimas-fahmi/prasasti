@@ -10,6 +10,8 @@ import onKeyDown from "@/src/lib/editor/handlers/onKeyDown";
 import { useMECPStore } from "@/src/lib/stores/mainEditorCommandPanel";
 import useRenderLeaf from "@/src/lib/editor/hooks/useRenderLeaf";
 import MainEditorToolbar from "@/src/ui/components/mainEditor/Toolbar";
+import { withInlines } from "@/src/lib/editor/instances";
+import LID from "@/src/ui/components/mainEditor/LID";
 
 const initialValue: Descendant[] = [
   { type: "paragraph", align: "left", children: [{ text: "" }] },
@@ -45,7 +47,10 @@ const ArtifactPageIndex = (_p: { id: string }) => {
   };
 
   // Initialize Editor Instance
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const editor = useMemo(
+    () => withInlines(withHistory(withReact(createEditor()))),
+    []
+  );
 
   // Render Element
   const renderElement = useRenderElement();
@@ -82,8 +87,13 @@ const ArtifactPageIndex = (_p: { id: string }) => {
           }}
         />
 
-        <MECP />
         <MainEditorToolbar isTyping={isTyping} />
+
+        {/* Main Editor Command Pannel */}
+        <MECP />
+
+        {/* Link Injector Dialog */}
+        <LID />
       </Slate>
     </div>
   );
