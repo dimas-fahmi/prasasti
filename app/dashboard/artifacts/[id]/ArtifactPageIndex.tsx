@@ -1,6 +1,6 @@
 "use client";
 import { isHotkey } from "is-hotkey";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor, Descendant } from "slate";
@@ -19,32 +19,7 @@ const initialValue: Descendant[] = [
 
 const ArtifactPageIndex = (_p: { id: string }) => {
   // Pull states from MECP store
-  const { openMecp } = useMECPStore();
-
-  // Is Typing State
-  const [isTyping, setIsTyping] = useState(false);
-
-  // Ref to store typing timeout
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Cleanup timeout when component unmounts
-  useEffect(() => {
-    return () => {
-      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-    };
-  }, []);
-
-  const handleTyping = () => {
-    if (!isTyping) setIsTyping(true);
-
-    // Clear existing timeout
-    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-
-    // Set a new timeout for 500ms
-    typingTimeoutRef.current = setTimeout(() => {
-      setIsTyping(false);
-    }, 500);
-  };
+  const { openMecp, openLid } = useMECPStore();
 
   // Initialize Editor Instance
   const editor = useMemo(
@@ -79,15 +54,12 @@ const ArtifactPageIndex = (_p: { id: string }) => {
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           onKeyDown={(e) => {
-            // Handle Typing
-            handleTyping();
-
             // Main Handler
-            onKeyDown(e, editor, { openMecp });
+            onKeyDown(e, editor, { openMecp, openLid });
           }}
         />
 
-        <MainEditorToolbar isTyping={isTyping} />
+        <MainEditorToolbar />
 
         {/* Main Editor Command Pannel */}
         <MECP />

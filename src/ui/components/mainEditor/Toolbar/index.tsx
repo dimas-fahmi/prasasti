@@ -112,7 +112,7 @@ const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
 
 ToolbarButton.displayName = "MainEditorToolbarButton";
 
-const MainEditorToolbar = ({ isTyping }: { isTyping: boolean }) => {
+const MainEditorToolbar = () => {
   // Can't seem to know why React Compiler keep memoize editor
   "use no memo";
 
@@ -131,7 +131,7 @@ const MainEditorToolbar = ({ isTyping }: { isTyping: boolean }) => {
   return (
     <motion.div
       initial={{ y: 100 }}
-      animate={isFocused && !isTyping ? { y: 0 } : { y: 100 }}
+      animate={isFocused ? { y: 0 } : { y: 100 }}
       transition={{
         duration: 0.3,
         type: "spring",
@@ -169,7 +169,7 @@ const MainEditorToolbar = ({ isTyping }: { isTyping: boolean }) => {
         <ToolbarButton
           icon={LinkIcon}
           onClick={() => {
-            openLid(editor);
+            openLid();
           }}
         />
         <ToolbarButton icon={ImageIcon} />
