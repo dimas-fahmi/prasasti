@@ -2,7 +2,7 @@
 import { isHotkey } from "is-hotkey";
 import { useMemo } from "react";
 import { withHistory } from "slate-history";
-import { Editable, Slate, withReact } from "slate-react";
+import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor, Descendant } from "slate";
 import useRenderElement from "@/src/lib/editor/hooks/useRenderElement";
 
@@ -24,9 +24,11 @@ const ArtifactPageIndex = (_p: { id: string }) => {
         rows={1}
         className="border-0 outline-0 resize-none text-4xl font-header font-bold scrollbar-none w-full field-sizing-content mb-2"
         placeholder="Untitled Artifact"
+        autoFocus
         onKeyDown={(e) => {
           if (isHotkey("enter", e)) {
             e.preventDefault();
+            ReactEditor.focus(editor);
           }
         }}
       />

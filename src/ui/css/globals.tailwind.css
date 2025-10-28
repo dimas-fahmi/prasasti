@@ -164,7 +164,7 @@
 }
 
 .empty-paragraph-element::after {
-  content: "Write or type '/' to open commands panel";
+  content: "Write or type '/' to open command panel";
   opacity: 0.5;
   position: absolute;
   top: 0;
