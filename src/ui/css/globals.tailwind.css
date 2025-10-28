@@ -159,6 +159,11 @@
   }
 }
 
+html,
+body {
+  scrollbar-gutter: stable both-edges;
+}
+
 .empty-paragraph-element {
   position: relative;
 }

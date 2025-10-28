@@ -1,6 +1,6 @@
 "use client";
 import { isHotkey } from "is-hotkey";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor, Descendant } from "slate";
@@ -9,6 +9,7 @@ import { MECP } from "@/src/ui/components/mainEditor/MECP";
 import onKeyDown from "@/src/lib/editor/handlers/onKeyDown";
 import { useMECPStore } from "@/src/lib/stores/mainEditorCommandPanel";
 import useRenderLeaf from "@/src/lib/editor/hooks/useRenderLeaf";
+import MainEditorToolbar from "@/src/ui/components/mainEditor/Toolbar";
 
 const initialValue: Descendant[] = [
   { type: "paragraph", align: "left", children: [{ text: "" }] },
@@ -17,6 +18,31 @@ const initialValue: Descendant[] = [
 const ArtifactPageIndex = (_p: { id: string }) => {
   // Pull states from MECP store
   const { openMecp } = useMECPStore();
+
+  // Is Typing State
+  const [isTyping, setIsTyping] = useState(false);
+
+  // Ref to store typing timeout
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup timeout when component unmounts
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    };
+  }, []);
+
+  const handleTyping = () => {
+    if (!isTyping) setIsTyping(true);
+
+    // Clear existing timeout
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+    // Set a new timeout for 500ms
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 500);
+  };
 
   // Initialize Editor Instance
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
@@ -48,11 +74,16 @@ const ArtifactPageIndex = (_p: { id: string }) => {
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           onKeyDown={(e) => {
+            // Handle Typing
+            handleTyping();
+
+            // Main Handler
             onKeyDown(e, editor, { openMecp });
           }}
         />
 
         <MECP />
+        <MainEditorToolbar isTyping={isTyping} />
       </Slate>
     </div>
   );
