@@ -10,6 +10,7 @@ export const mecpHandler = (
   e: KeyboardEvent<HTMLDivElement>,
   editor: MainEditor,
   openMecp: MainEditorCommandPanelStore["openMecp"],
+  openLid: MainEditorCommandPanelStore["openLid"],
   cbe?: RegisteredElement
 ) => {
   if (!cbe) return;
@@ -21,6 +22,12 @@ export const mecpHandler = (
   if (e.key === "/" && isCBEDefault) {
     e.preventDefault();
     openMecp(editor);
+  }
+
+  // Open LID
+  if (HOTKEYS.insertHyperlink.check(e)) {
+    e.preventDefault();
+    openLid();
   }
 };
 

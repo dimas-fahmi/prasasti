@@ -10,14 +10,20 @@ import { marksHandler, mecpHandler } from "./onKeyDownListeners";
 const onKeyDown = (
   e: KeyboardEvent<HTMLDivElement>,
   editor: MainEditor,
-  { openMecp }: { openMecp: MainEditorCommandPanelStore["openMecp"] }
+  {
+    openMecp,
+    openLid,
+  }: {
+    openMecp: MainEditorCommandPanelStore["openMecp"];
+    openLid: MainEditorCommandPanelStore["openLid"];
+  }
 ) => {
   // Get Current Closest Block
   const [cbe] = getCurrentBlock(editor) || [];
   const currentBlockElement = cbe as RegisteredElement | undefined;
 
   // MECP Handler
-  mecpHandler(e, editor, openMecp, currentBlockElement);
+  mecpHandler(e, editor, openMecp, openLid, currentBlockElement);
 
   // Mark Toggle Handler
   marksHandler(e, editor);

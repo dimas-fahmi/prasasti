@@ -21,6 +21,10 @@ export const HOTKEYS = {
     hotkey: "mod+alt+r",
     check: isHotkey("mod+alt+r"),
   },
+  insertHyperlink: {
+    hotkey: "mod+k",
+    check: isHotkey("mod+k"),
+  },
 } as const;
 
 export type RegisteredHotkey = keyof typeof HOTKEYS;
