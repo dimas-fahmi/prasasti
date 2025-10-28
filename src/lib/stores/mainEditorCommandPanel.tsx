@@ -73,11 +73,10 @@ export interface MainEditorCommandPanelStore {
    *
    * Helper function to open LID
    *
-   * @param editor MainEditor
    * @param selectedLink optional
    * @returns void
    */
-  openLid: (editor: MainEditor, selectedLink?: LinkElementType) => void;
+  openLid: (selectedLink?: LinkElementType) => void;
 
   /**
    * Helper functio to close LID and set related field back to default value
@@ -102,9 +101,7 @@ export const useMECPStore = create<MainEditorCommandPanelStore>((set) => {
 
     selectedLink: null,
 
-    openLid: (editor, selectedLink) =>
-      set({ editor, selectedLink, lidOpen: true }),
-    closeLid: () =>
-      set({ editor: undefined, selectedLink: null, lidOpen: false }),
+    openLid: (selectedLink) => set({ selectedLink, lidOpen: true }),
+    closeLid: () => set({ selectedLink: null, lidOpen: false }),
   };
 });
