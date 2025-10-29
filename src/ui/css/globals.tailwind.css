@@ -90,47 +90,70 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(100% 0.00011 271.152);
-  --success: oklch(74.039% 0.25192 142.511);
-  --success-foreground: oklch(0% 0 0);
-  --link: oklch(77.538% 0.12299 227.584);
-  --link-foreground: oklch(0% 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Base — dark stone and parchment contrast */
+  --background: oklch(0.12 0.02 260); /* deep charcoal stone */
+  --foreground: oklch(0.95 0.02 85); /* warm ivory text */
+
+  --card: oklch(0.16 0.015 260); /* slightly lighter stone */
+  --card-foreground: oklch(0.95 0.02 85);
+
+  --popover: oklch(0.16 0.015 260);
+  --popover-foreground: oklch(0.95 0.02 85);
+
+  /* Primary — golden inscription color */
+  --primary: oklch(0.78 0.12 85); /* muted gold */
+  --primary-foreground: oklch(0.1 0.015 260); /* dark contrast */
+
+  /* Secondary — aged bronze tone */
+  --secondary: oklch(0.28 0.05 80);
+  --secondary-foreground: oklch(0.95 0.02 85);
+
+  /* Muted — slate gray */
+  --muted: oklch(0.24 0.015 260);
+  --muted-foreground: oklch(0.7 0.02 85);
+
+  /* Accent — warm clay */
+  --accent: oklch(0.32 0.06 65);
+  --accent-foreground: oklch(0.95 0.02 85);
+
+  /* Destructive — desaturated terracotta */
+  --destructive: oklch(0.58 0.14 35);
+  --destructive-foreground: oklch(0.98 0.02 85);
+
+  /* Success — mossy green */
+  --success: oklch(0.7 0.18 145);
+  --success-foreground: oklch(0.12 0.015 260);
+
+  /* Link — soft lapis blue */
+  --link: oklch(0.72 0.12 250);
+  --link-foreground: oklch(0.1 0.015 260);
+
+  /* Subtle structure */
+  --border: oklch(53.628% 0.00489 236.976 / 0.3);
+  --input: oklch(0.18 0.01 260 / 40%);
+  --ring: oklch(0.5 0.05 80);
+
+  /* Charts — natural pigments */
+  --chart-1: oklch(0.68 0.12 85); /* gold */
+  --chart-2: oklch(0.65 0.15 160); /* jade */
+  --chart-3: oklch(0.75 0.18 70); /* amber */
+  --chart-4: oklch(0.6 0.18 300); /* violet ink */
+  --chart-5: oklch(0.7 0.17 25); /* clay red */
+
+  /* Sidebar — polished basalt */
+  --sidebar: oklch(0.14 0.015 260);
+  --sidebar-foreground: oklch(0.95 0.02 85);
+  --sidebar-primary: oklch(0.78 0.12 85);
+  --sidebar-primary-foreground: oklch(0.12 0.015 260);
+  --sidebar-accent: oklch(0.25 0.03 70);
+  --sidebar-accent-foreground: oklch(0.95 0.02 85);
+  --sidebar-border: oklch(0.2 0.01 260 / 30%);
+  --sidebar-ring: oklch(0.45 0.05 85);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 m-0 p-0;
   }
   body {
     @apply bg-background text-foreground font-body;
