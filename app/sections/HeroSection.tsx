@@ -1,12 +1,22 @@
 import { Button } from "@/src/ui/shadcn/components/ui/button";
 import { Import, Lock, LockOpen } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 const LandingHeroSection = () => {
   return (
     <section className="min-h-dvh p-4 md:p-16 lg:p-24 max-w-7xl mx-auto flex items-center justify-between">
       {/* Content */}
-      <div className="max-w-md">
+      <div className="max-w-md md:pb-16">
+        {/* Logo */}
+        <Image
+          width={180}
+          height={40}
+          src={"/assets/logos/svg/horizontal.svg"}
+          alt="Prasasti Logo"
+          className="mb-6 hidden md:block"
+        />
+
         <h1 className="font-header font-bold text-4xl mb-4">
           Write. Preserve. Own Forever.
         </h1>
@@ -32,7 +42,14 @@ const LandingHeroSection = () => {
       </div>
 
       {/* Illustration */}
-      <div></div>
+      <div>
+        <Image
+          width={380}
+          height={380}
+          src={"/assets/arts/svg/hero-art-01.svg"}
+          alt="Inscription Art"
+        />
+      </div>
     </section>
   );
 };
