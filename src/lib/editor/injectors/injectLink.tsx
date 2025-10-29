@@ -2,6 +2,7 @@ import { Editor, Path, Range, Transforms } from "slate";
 import { MainEditor } from "../../types/slate";
 import { LinkElementType } from "../../types/slate-elements";
 import { NodeInsertNodesOptions } from "slate/dist/interfaces/transforms/node";
+import { ReactEditor } from "slate-react";
 
 export const injectLink = (
   editor: MainEditor,
@@ -14,19 +15,21 @@ export const injectLink = (
   // Throw Error if editor.selection is fallsy
   if (!selection) throw new Error("Cannot insert link without a selection.");
 
-  // Throw error if selection is not collapsed
-  if (!Range.isCollapsed(selection))
-    throw new Error("Use wrapLink() for expanded selections.");
+  const isCollapsed = Range.isCollapsed(selection);
 
   // Precompute where is insertion point and it's sibling position should be
   const { anchor } = selection;
   const nextPath = Path.next(anchor.path);
   const siblingPath = Path.next(nextPath);
+
+  // Check whether this is the end of a block or not
   const next = Editor.next(editor);
+
+  // Insert Link
 
   Transforms.insertNodes(editor, element, {
     select: true,
-    at: anchor,
+    at: isCollapsed ? anchor : undefined,
     ...options,
   });
 
@@ -38,4 +41,7 @@ export const injectLink = (
       { at: siblingPath, select: true }
     );
   }
+
+  // Always refocus editor
+  ReactEditor.focus(editor);
 };

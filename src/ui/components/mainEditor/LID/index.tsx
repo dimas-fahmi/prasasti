@@ -8,7 +8,7 @@ import {
   DialogFooter,
 } from "@/src/ui/shadcn/components/ui/dialog";
 import { Label } from "@/src/ui/shadcn/components/ui/label";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,7 @@ import { Button } from "@/src/ui/shadcn/components/ui/button";
 import { LinkElementType } from "@/src/lib/types/slate-elements";
 import { injectLink } from "@/src/lib/editor/injectors/injectLink";
 import { ReactEditor, useSlateStatic } from "slate-react";
-import { Range } from "slate";
+import { Editor, Node, Range, Transforms } from "slate";
 
 const linkSchema = z.object({
   text: z.string().min(1, { error: "Required, at least 1 character long" }),
@@ -33,6 +33,23 @@ const LID = () => {
   const selection = editor?.selection;
   const isCollapsed = selection ? Range.isCollapsed(selection) : true;
 
+  let selectedText: string | null = null;
+
+  // Get Current Selected Text
+  if (!isCollapsed && selection) {
+    selectedText = Editor.string(editor, selection);
+  }
+
+  // Overwrite if there's a selected link
+  if (selectedLink) {
+    selectedText = Node.string(selectedLink);
+  }
+
+  // Default Values
+  const defaultText = selectedText || "";
+  const defaultHref = selectedLink?.href || "";
+  const defaultBlank = selectedLink ? selectedLink?.blank : true;
+
   // Initialize FORM
   const {
     control,
@@ -43,16 +60,36 @@ const LID = () => {
     resolver: zodResolver(linkSchema),
     mode: "onChange",
     defaultValues: {
-      text: "",
-      href: "",
-      blank: false,
+      text: defaultText,
+      href: defaultHref,
+      blank: defaultBlank,
     },
   });
 
+  /**
+   * Is the model opened at least once
+   **/
+  const openRef = useRef(false);
+
   // Always trigger closeLid when lidOpen set to false
   useEffect(() => {
+    if (lidOpen) {
+      openRef.current = true;
+
+      // Initialize Default Value (somehow RHF can't didn't listen to changes)
+      reset({
+        text: defaultText,
+        href: defaultHref,
+        blank: defaultBlank,
+      });
+    }
+
+    // Reset Form and refocus editor
     if (!lidOpen) {
-      ReactEditor.focus(editor);
+      // The check prevent the editor to overide other field focus when it's mounted
+      if (openRef.current) {
+        ReactEditor.focus(editor);
+      }
       closeLid();
       reset({
         text: "",
@@ -60,7 +97,15 @@ const LID = () => {
         blank: false,
       });
     }
-  }, [lidOpen, closeLid, reset, editor]);
+  }, [
+    lidOpen,
+    closeLid,
+    reset,
+    editor,
+    defaultText,
+    defaultBlank,
+    defaultHref,
+  ]);
 
   return (
     <Dialog open={lidOpen} onOpenChange={setLidOpen}>
@@ -73,25 +118,33 @@ const LID = () => {
           onSubmit={handleSubmit((data) => {
             if (!isValid || !editor || !selection) return;
 
-            if (selectedLink) {
-              console.log("TODO: UPDATE LINK");
-            } else if (!isCollapsed) {
-              console.log("TODO: CREATE WRAP LINK");
-            } else {
-              // Construct Link Element
-              const element: LinkElementType = {
-                type: "link",
-                href: data.href,
-                blank: data.blank,
-                children: [{ text: data.text }],
-              };
+            // Construct Link Element
+            const element: LinkElementType = {
+              type: "link",
+              href: data.href,
+              blank: data.blank,
+              children: [{ text: data.text }],
+            };
 
+            if (selectedLink) {
+              const path = ReactEditor.findPath(editor, selectedLink);
+              Transforms.setNodes(editor, element, { at: path });
+              const childrenPath = [...path, 0];
+              Transforms.delete(editor, { at: childrenPath });
+              Transforms.insertNodes(
+                editor,
+                { text: data.text },
+                {
+                  at: childrenPath,
+                  select: true,
+                }
+              );
+            } else {
               // Insert Link
               injectLink(editor, element);
-
-              // Close LID
-              closeLid();
             }
+
+            closeLid();
           })}
         >
           <div className="space-y-4 py-4">
