@@ -1,10 +1,15 @@
 import { KeyboardEvent } from "react";
 import { MainEditor } from "../../types/slate";
-import { RegisteredElement } from "../../types/slate-elements";
+import {
+  ElementWithAlignment,
+  RegisteredElement,
+} from "../../types/slate-elements";
 import isElementDefault from "../utils/isElementDefault";
 import { MainEditorCommandPanelStore } from "../../stores/mainEditorCommandPanel";
 import { HOTKEYS } from "../../configs/hotkeys";
 import { resetMarks, toggleMark } from "../utils/marks";
+import { toggleAlignment } from "../utils/alignment";
+import { getCurrentBlock } from "../utils/getElement";
 
 export const mecpHandler = (
   e: KeyboardEvent<HTMLDivElement>,
@@ -35,6 +40,9 @@ export const marksHandler = (
   e: KeyboardEvent<HTMLDivElement>,
   editor: MainEditor
 ) => {
+  // Get Current Block
+  const [cbe] = getCurrentBlock(editor) || [];
+
   // Bold
   if (HOTKEYS.toggleEditorBold.check(e)) {
     e.preventDefault();
@@ -57,6 +65,12 @@ export const marksHandler = (
   if (HOTKEYS.toggleEditorStrikeThrough.check(e)) {
     e.preventDefault();
     toggleMark(editor, "strikeThrough");
+  }
+
+  // ALignment
+  if (HOTKEYS.toggleEditorAlignment.check(e) && cbe) {
+    e.preventDefault();
+    toggleAlignment(editor, cbe as ElementWithAlignment);
   }
 
   // Reset

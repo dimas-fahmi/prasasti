@@ -7,10 +7,13 @@ export type RegisteredElement =
   | ParagraphElementType
   | LinkElementType
   | BadgeElementType;
+
 export type RegisteredElementType = RegisteredElement["type"];
 
 // Element With Alignment
 export type ElementWithAlignment = ParagraphElementType;
+export type ElementWithAlignmentType = ElementWithAlignment["type"];
+export type Alignment = "left" | "center" | "right";
 
 // Element Props
 export type ElementProps<T> = RenderElementProps & {
@@ -20,7 +23,7 @@ export type ElementProps<T> = RenderElementProps & {
 // Paragraph Element
 export type ParagraphElementType = {
   type: "paragraph";
-  align: "left" | "center" | "right";
+  align: Alignment;
   children: Descendant[];
 };
 

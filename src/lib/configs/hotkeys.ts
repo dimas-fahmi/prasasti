@@ -17,6 +17,10 @@ export const HOTKEYS = {
     hotkey: "mod+alt+s",
     check: isHotkey("mod+alt+s"),
   },
+  toggleEditorAlignment: {
+    hotkey: "mod+alt+a",
+    check: isHotkey("mod+alt+a"),
+  },
   resetEditorMarks: {
     hotkey: "mod+alt+r",
     check: isHotkey("mod+alt+r"),

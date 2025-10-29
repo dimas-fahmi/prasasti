@@ -7,7 +7,6 @@ import {
 } from "@/src/ui/shadcn/components/ui/tooltip";
 import { cn } from "@/src/ui/shadcn/lib/utils";
 import {
-  AlignLeft,
   Bold,
   ImageIcon,
   Italic,
@@ -23,6 +22,15 @@ import { useDashboardStore } from "@/src/lib/stores/dashboardStore";
 import { MainEditor } from "@/src/lib/types/slate";
 import { Separator } from "@/src/ui/shadcn/components/ui/separator";
 import { useMECPStore } from "@/src/lib/stores/mainEditorCommandPanel";
+import { getCurrentBlock } from "@/src/lib/editor/utils/getElement";
+import {
+  getAlignmentIcon,
+  toggleAlignment,
+} from "@/src/lib/editor/utils/alignment";
+import {
+  Alignment,
+  ElementWithAlignment,
+} from "@/src/lib/types/slate-elements";
 
 const markButtons = [
   {
@@ -83,10 +91,14 @@ interface ToolbarButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   icon: LucideIcon;
   tooltipContent?: React.ReactNode;
   active?: boolean;
+  disabled?: boolean;
 }
 
 const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
-  ({ className, icon: Icon, active, tooltipContent, ...props }, ref) => {
+  (
+    { className, icon: Icon, active, disabled, tooltipContent, ...props },
+    ref
+  ) => {
     return (
       <Tooltip>
         <TooltipTrigger asChild>
@@ -95,6 +107,7 @@ const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
             {...props}
             className={cn(
               "w-9 h-9 rounded-full flex-center",
+              disabled ? "pointer-events-none" : "",
               active
                 ? "bg-muted"
                 : "opacity-60 hover:opacity-100 hover:bg-muted",
@@ -127,6 +140,14 @@ const MainEditorToolbar = () => {
 
   // Pull states from MECP store
   const { openLid } = useMECPStore();
+
+  // Get Current Block Element
+  const [currentBlock] = getCurrentBlock(editor) || [];
+  const currentAlignment: Alignment = currentBlock
+    ? (currentBlock as ElementWithAlignment)?.align
+    : "left";
+
+  const AlignmentIcon = getAlignmentIcon(currentAlignment);
 
   return (
     <motion.div
@@ -171,13 +192,42 @@ const MainEditorToolbar = () => {
           onClick={() => {
             openLid();
           }}
+          tooltipContent={
+            <div>
+              <h1 className="font-bold font-header mb-2">Insert Link</h1>
+              <span>
+                <KbdGroup>
+                  <Kbd>⌘</Kbd> + <Kbd>K</Kbd>
+                </KbdGroup>
+              </span>
+            </div>
+          }
         />
-        <ToolbarButton icon={ImageIcon} />
+
+        {/* TODO: NOT YET IMPLEMENTED */}
+        <ToolbarButton icon={ImageIcon} disabled />
 
         <Separator orientation="vertical" />
 
         {/* Alignment */}
-        <ToolbarButton icon={AlignLeft} />
+        <ToolbarButton
+          icon={AlignmentIcon}
+          onClick={() => {
+            if (currentBlock) {
+              toggleAlignment(editor, currentBlock as ElementWithAlignment);
+            }
+          }}
+          tooltipContent={
+            <div>
+              <h1 className="font-bold font-header mb-2">Toggle Alignment</h1>
+              <span>
+                <KbdGroup>
+                  <Kbd>⌘</Kbd> + <Kbd>ALT</Kbd> + <Kbd>A</Kbd>
+                </KbdGroup>
+              </span>
+            </div>
+          }
+        />
       </div>
     </motion.div>
   );
