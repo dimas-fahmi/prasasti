@@ -1,9 +1,15 @@
+"use client";
+
+import { useGetMetadata } from "@/src/db/idb/hooks/useGetMetadata";
 import { Button } from "@/src/ui/shadcn/components/ui/button";
 import { Import, Lock, LockOpen } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
 
 const LandingHeroSection = () => {
+  const { data: metadata, isLoading: isLoadingMetadata } = useGetMetadata();
+  const router = useRouter();
+
   return (
     <section className="min-h-dvh p-4 md:p-16 lg:p-24 max-w-7xl mx-auto flex items-center justify-between">
       {/* Content */}
@@ -29,12 +35,29 @@ const LandingHeroSection = () => {
         </p>
 
         <div className="mt-6 flex gap-2">
-          <Button className="group/button" size={"lg"}>
+          <Button
+            className="group/button"
+            size={"lg"}
+            disabled={isLoadingMetadata}
+            onClick={() => {
+              if (isLoadingMetadata) return;
+
+              if (metadata) {
+                router.push("/dashboard");
+              } else {
+                router.push("/new");
+              }
+            }}
+          >
             <Lock className="group-hover/button:block hidden" />
             <LockOpen className="group-hover/button:hidden block" />
             Continue
           </Button>
-          <Button variant={"outline"} size={"lg"}>
+          <Button
+            variant={"outline"}
+            size={"lg"}
+            disabled={isLoadingMetadata || !!metadata}
+          >
             <Import />
             Import Prasasti
           </Button>
