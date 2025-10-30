@@ -1,15 +1,8 @@
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Navigations from "./Navigations";
 import MetadataCard from "./MetadataCard";
+import NewNoteButton from "./NewNoteButton";
 
 const DashboardSidebar = () => {
-  const router = useRouter();
-
-  const createNewArtifact = () => {
-    router.push(`/dashboard/artifacts/${crypto.randomUUID()}`);
-  };
-
   return (
     <div className="py-6 px-4 space-y-6">
       {/* Uptop Section */}
@@ -26,17 +19,11 @@ const DashboardSidebar = () => {
       {/* Prasastis */}
       <section className="space-y-4">
         <h1 className="text-xs font-semibold uppercase opacity-80">
-          Recent Artifacts
+          Recent Notes
         </h1>
 
-        {/* New Artifact Button */}
-        <button
-          type="button"
-          className="flex items-center gap-2 text-sm p-2 hover:bg-muted rounded-md w-full opacity-70"
-          onClick={createNewArtifact}
-        >
-          <Plus className="w-4 h-4" /> New Artifact
-        </button>
+        {/* New Note Button */}
+        <NewNoteButton />
       </section>
     </div>
   );
