@@ -16,15 +16,9 @@ import { useUpdateNote } from "@/src/db/idb/hooks/useUpdateNote";
 import { queries } from "@/src/lib/queries";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { validateChildren } from "@/src/lib/editor/utils/validateChildren";
-import { ParagraphElementType } from "@/src/lib/types/slate-elements";
 import ArtifactPageIndexSkeleton from "./ArtifactPageIndexSkeleton";
 import { Note } from "@/src/db/idb/schema/note";
-
-const defaultElement: ParagraphElementType = {
-  type: "paragraph",
-  align: "left",
-  children: [{ text: "" }],
-};
+import { DEFAULT_INITIAL } from "@/src/db/idb/actions/generateNote";
 
 const SAVE_TIMEOUT = 500; // 0.5s wait after user stop typing, then save.
 
@@ -97,9 +91,9 @@ const ArtifactPageIndex = ({ id }: { id: string }) => {
     if (note?.content) {
       const parsed = JSON.parse(note.content);
       const isValid = validateChildren(parsed);
-      return isValid ? parsed : [defaultElement];
+      return isValid ? parsed : DEFAULT_INITIAL;
     }
-    return [defaultElement];
+    return DEFAULT_INITIAL;
   }, [note]);
 
   // Effect to set initial title from fetched note

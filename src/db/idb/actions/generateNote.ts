@@ -1,4 +1,8 @@
+import { Descendant } from "slate";
 import { Note } from "../schema/note";
+export const DEFAULT_INITIAL: Descendant[] = [
+  { type: "paragraph", align: "left", children: [{ text: "" }] },
+];
 
 export const generateNote = (
   costum?: Partial<Omit<Note, "createdAt">>
@@ -6,7 +10,7 @@ export const generateNote = (
   return {
     id: crypto.randomUUID(),
     title: "",
-    content: JSON.stringify([{ text: "" }]),
+    content: JSON.stringify(DEFAULT_INITIAL),
     ...(costum || {}),
     createdAt: new Date(),
   };
