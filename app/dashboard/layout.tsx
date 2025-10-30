@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetMetadata } from "@/src/db/idb/hooks/useGetMetadata";
 import { useDashboardStore } from "@/src/lib/stores/dashboardStore";
 import DashboardSidebar from "@/src/ui/components/dashboard/Sidebar";
 import {
@@ -7,6 +8,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/src/ui/shadcn/components/ui/resizable";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 
 const DashboardLayout = ({
@@ -16,6 +18,17 @@ const DashboardLayout = ({
 }) => {
   const { setMainWidth } = useDashboardStore();
   const mainRef = useRef<HTMLElement>(null);
+
+  const { data: metadata, isPending: isLoadingMetadata } = useGetMetadata();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoadingMetadata) return;
+
+    if (!metadata) {
+      router.push("/");
+    }
+  }, [metadata, isLoadingMetadata, router]);
 
   useEffect(() => {
     const current = mainRef.current;

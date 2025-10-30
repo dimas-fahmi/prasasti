@@ -7,5 +7,6 @@ export interface Note {
   parentPage?: string;
   createdAt: Date | string;
   updatedAt?: Date | string;
+  lastOpenedAt?: Date | string;
   deletedAt?: Date | string;
 }

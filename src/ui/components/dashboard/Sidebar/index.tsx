@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import UserCard from "./UserCard";
 import Navigations from "./Navigations";
+import MetadataCard from "./MetadataCard";
 
 const DashboardSidebar = () => {
   const router = useRouter();
@@ -14,8 +14,8 @@ const DashboardSidebar = () => {
     <div className="py-6 px-4 space-y-6">
       {/* Uptop Section */}
       <section id="dashboard-sidebar-uptop" className="space-y-6">
-        {/* User Card */}
-        <UserCard />
+        {/* Metadata */}
+        <MetadataCard />
       </section>
 
       {/* Navigation Section */}
