@@ -15,44 +15,52 @@ import LID from "@/src/ui/components/mainEditor/LID";
 import { useUpdateNote } from "@/src/db/idb/hooks/useUpdateNote";
 import { queries } from "@/src/lib/queries";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { validateChildren } from "@/src/lib/editor/utils/validateChildren";
+import { ParagraphElementType } from "@/src/lib/types/slate-elements";
+import ArtifactPageIndexSkeleton from "./ArtifactPageIndexSkeleton";
 import { Note } from "@/src/db/idb/schema/note";
 
-const initialValue: Descendant[] = [
-  { type: "paragraph", align: "left", children: [{ text: "" }] },
-];
+const defaultElement: ParagraphElementType = {
+  type: "paragraph",
+  align: "left",
+  children: [{ text: "" }],
+};
+
+const SAVE_TIMEOUT = 500; // 0.5s wait after user stop typing, then save.
 
 const ArtifactPageIndex = ({ id }: { id: string }) => {
-  // Pull states from MECP store
+  // Pull command panel states from the store
   const { openMecp, openLid } = useMECPStore();
 
-  // Initialize Editor Instance
+  // Initialize Slate editor with plugins for inlines, history, and React integration
   const editor = useMemo(
     () => withInlines(withHistory(withReact(createEditor()))),
     []
   );
 
-  // Render Element
+  // Custom hooks for rendering Slate elements and leaves
   const renderElement = useRenderElement();
   const renderLeaf = useRenderLeaf();
 
-  // Update Last Opened Artifact
-  const recentQuery = queries.notes.recents();
+  // Query client for invalidating recent notes query after updates
   const queryClient = useQueryClient();
+  const recentQuery = queries.notes.recents();
 
-  // Query Note
+  // Fetch the specific note using Tanstack Query
   const noteQuery = queries.notes.note(id);
-  const { data: note, refetch } = useQuery({
+  const {
+    data: note,
+    refetch,
+    isLoading,
+  } = useQuery({
     ...noteQuery,
   });
 
-  // Title State
+  // State for the note title
   const [title, setTitle] = useState("");
 
-  // Is Typing State
-  const [isTyping, setIsTyping] = useState(false);
-
-  // Mutation
-  const { mutate: updateNote, isPending: _isUpdatingNote } = useUpdateNote({
+  // Mutation hook for updating the note in the database
+  const { mutate: updateNote } = useUpdateNote({
     onSettled: () => {
       refetch();
       queryClient.invalidateQueries({
@@ -61,38 +69,56 @@ const ArtifactPageIndex = ({ id }: { id: string }) => {
     },
   });
 
+  // Debounce Mechanism
+  const [isTyping, setIsTyping] = useState(0);
+
   useEffect(() => {
     if (isTyping) {
       const debouncer = setTimeout(() => {
-        setIsTyping(false);
-
-        const note: Partial<Note> = {
+        setIsTyping(0);
+        const changes: Partial<Note> = {
           title,
           content: JSON.stringify(editor.children),
         };
-
-        updateNote({ key: id, changes: note });
-      }, 500);
+        updateNote({ key: id, changes });
+      }, SAVE_TIMEOUT);
 
       return () => clearTimeout(debouncer);
     }
-  }, [isTyping, setIsTyping, title, id, updateNote, editor]);
+  }, [isTyping, setIsTyping, updateNote, editor, id, title]);
 
-  // Update Last Opened
+  // Effect to update the last opened timestamp on component mount
   useEffect(() => {
     updateNote({ key: id, changes: { lastOpenedAt: new Date() } });
   }, [id, updateNote]);
 
+  // Compute initial editor value from note content or default
+  const initialValue: Descendant[] = useMemo(() => {
+    if (note?.content) {
+      const parsed = JSON.parse(note.content);
+      const isValid = validateChildren(parsed);
+      return isValid ? parsed : [defaultElement];
+    }
+    return [defaultElement];
+  }, [note]);
+
+  // Effect to set initial title from fetched note
   useEffect(() => {
     if (note) {
+      // DUNNO WHY TF ESLINT KEEP WHINING
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(note?.title || "");
     }
   }, [note]);
 
+  // Handle loading state while fetching note
+  if (isLoading || !note) {
+    return <ArtifactPageIndexSkeleton />; // Show loading indicator until note is available
+  }
+
   return (
-    <div className="p-4 md:p-12" suppressHydrationWarning>
-      {/* Title */}
+    <div className="p-4 md:p-12">
+      {/* Title input as a resizable textarea */}
       <textarea
         rows={1}
         className="border-0 outline-0 resize-none text-4xl font-header font-bold scrollbar-none w-full field-sizing-content mb-2"
@@ -101,9 +127,9 @@ const ArtifactPageIndex = ({ id }: { id: string }) => {
         value={title}
         onChange={(e) => {
           setTitle(e.target.value);
+          setIsTyping(isTyping + 1);
         }}
         onKeyDown={(e) => {
-          setIsTyping(true);
           if (isHotkey("enter", e)) {
             e.preventDefault();
             ReactEditor.focus(editor);
@@ -111,27 +137,28 @@ const ArtifactPageIndex = ({ id }: { id: string }) => {
         }}
       />
 
-      {/* Slate Editor */}
+      {/* Slate rich text editor */}
       <Slate
         editor={editor}
-        initialValue={
-          note?.content ? JSON.parse(note?.content || "") : initialValue
-        }
+        initialValue={initialValue}
+        onChange={() => {
+          setIsTyping(isTyping + 1);
+        }}
       >
         <Editable
           className="border-0 outline-0"
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
+          renderElement={renderElement} // Custom element rendering
+          renderLeaf={renderLeaf} // Custom leaf rendering
           onKeyDown={(e) => {
-            setIsTyping(true);
-            // Main Handler
+            // Handle key down events for editor commands
             onKeyDown(e, editor, { openMecp, openLid });
           }}
         />
 
+        {/* Editor toolbar component */}
         <MainEditorToolbar />
 
-        {/* Main Editor Command Pannel */}
+        {/* Main Editor Command Panel */}
         <MECP />
 
         {/* Link Injector Dialog */}
