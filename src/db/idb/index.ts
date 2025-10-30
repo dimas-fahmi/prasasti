@@ -11,8 +11,8 @@ const db_dexie = new Dexie("main") as Dexie & {
 
 db_dexie.version(1).stores({
   metadata: "&id",
-  medias: "&id,name",
-  notes: "&id,title",
+  medias: "&id,name,createdAt,deletedAt",
+  notes: "&id,title,createdAt,updatedAt,lastOpenedAt,deletedAt",
 });
 
 export { db_dexie };

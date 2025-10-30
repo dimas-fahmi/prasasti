@@ -1,9 +1,7 @@
-import { Node } from "slate";
-
 export interface Note {
   id: string;
   title?: string;
-  content: Node[];
+  content: string;
   parentPage?: string;
   createdAt: Date | string;
   updatedAt?: Date | string;

@@ -1,6 +1,6 @@
 "use client";
 import { isHotkey } from "is-hotkey";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor, Descendant } from "slate";
@@ -12,12 +12,15 @@ import useRenderLeaf from "@/src/lib/editor/hooks/useRenderLeaf";
 import MainEditorToolbar from "@/src/ui/components/mainEditor/Toolbar";
 import { withInlines } from "@/src/lib/editor/instances";
 import LID from "@/src/ui/components/mainEditor/LID";
+import { useUpdateNote } from "@/src/db/idb/hooks/useUpdateNote";
+import { queries } from "@/src/lib/queries";
+import { useQueryClient } from "@tanstack/react-query";
 
 const initialValue: Descendant[] = [
   { type: "paragraph", align: "left", children: [{ text: "" }] },
 ];
 
-const ArtifactPageIndex = (_p: { id: string }) => {
+const ArtifactPageIndex = ({ id }: { id: string }) => {
   // Pull states from MECP store
   const { openMecp, openLid } = useMECPStore();
 
@@ -30,6 +33,22 @@ const ArtifactPageIndex = (_p: { id: string }) => {
   // Render Element
   const renderElement = useRenderElement();
   const renderLeaf = useRenderLeaf();
+
+  // Update Last Opened Artifact
+  const recentQuery = queries.notes.recents();
+  const queryClient = useQueryClient();
+  const { mutate: updateNote, isPending: _isUpdatingNote } = useUpdateNote({
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: recentQuery.queryKey,
+      });
+    },
+  });
+
+  // Update Last Opened
+  useEffect(() => {
+    updateNote({ key: id, changes: { lastOpenedAt: new Date() } });
+  }, [id, updateNote]);
 
   return (
     <div className="p-4 md:p-12">

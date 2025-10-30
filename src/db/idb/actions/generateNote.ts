@@ -6,7 +6,7 @@ export const generateNote = (
   return {
     id: crypto.randomUUID(),
     title: "",
-    content: [{ text: "" }],
+    content: JSON.stringify([{ text: "" }]),
     ...(costum || {}),
     createdAt: new Date(),
   };

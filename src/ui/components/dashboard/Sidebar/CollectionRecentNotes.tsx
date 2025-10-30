@@ -1,7 +1,16 @@
 import NoteButton from "./NoteButton";
+import { queries } from "@/src/lib/queries";
+import { useQuery } from "@tanstack/react-query";
 
 const CollectionRecentNotes = () => {
-  return <NoteButton />;
+  const recentQuery = queries.notes.recents();
+  const { data: notes, isPending: _isPendingNotes } = useQuery({
+    ...recentQuery,
+  });
+
+  const isValid = notes && Array.isArray(notes) && notes.length;
+
+  return <>{isValid && notes.map((item) => <NoteButton key={item?.id} />)}</>;
 };
 
 export default CollectionRecentNotes;

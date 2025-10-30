@@ -1,5 +1,6 @@
 "use client";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "@/src/lib/queries";
 import "@/src/ui/css/globals.tailwind.css";
 import { interFont, spaceMonoFont } from "@/src/ui/fonts";
@@ -18,6 +19,7 @@ export default function RootLayout({
       >
         <QueryClientProvider client={queryClient}>
           {children}
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </body>
     </html>
