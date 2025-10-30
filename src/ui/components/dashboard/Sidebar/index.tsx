@@ -1,7 +1,6 @@
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import UserCard from "./UserCard";
-import PrasastiPicker from "./PrasastiPicker";
 import Navigations from "./Navigations";
 
 const DashboardSidebar = () => {
@@ -17,9 +16,6 @@ const DashboardSidebar = () => {
       <section id="dashboard-sidebar-uptop" className="space-y-6">
         {/* User Card */}
         <UserCard />
-
-        {/* Workspace Picker */}
-        <PrasastiPicker />
       </section>
 
       {/* Navigation Section */}

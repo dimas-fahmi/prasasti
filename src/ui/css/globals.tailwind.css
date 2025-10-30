@@ -130,7 +130,7 @@
 
   /* Subtle structure */
   --border: oklch(53.628% 0.00489 236.976 / 0.3);
-  --input: oklch(0.18 0.01 260 / 40%);
+  --input: oklch(53.628% 0.00489 236.976 / 0.3);
   --ring: oklch(0.5 0.05 80);
 
   /* Charts — natural pigments */
