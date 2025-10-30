@@ -10,7 +10,12 @@ const CollectionRecentNotes = () => {
 
   const isValid = notes && Array.isArray(notes) && notes.length;
 
-  return <>{isValid && notes.map((item) => <NoteButton key={item?.id} />)}</>;
+  return (
+    <>
+      {isValid &&
+        notes.map((item) => <NoteButton key={item?.id} note={item} />)}
+    </>
+  );
 };
 
 export default CollectionRecentNotes;
