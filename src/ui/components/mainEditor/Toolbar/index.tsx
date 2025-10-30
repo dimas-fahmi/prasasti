@@ -88,7 +88,7 @@ const markButtons = [
 ] as const;
 
 interface ToolbarButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   tooltipContent?: React.ReactNode;
   active?: boolean;
   disabled?: boolean;
@@ -114,7 +114,7 @@ const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
               className
             )}
           >
-            <Icon className="w-5 h-5" />
+            {Icon && <Icon className="w-5 h-5" />}
           </button>
         </TooltipTrigger>
         {tooltipContent && <TooltipContent>{tooltipContent}</TooltipContent>}

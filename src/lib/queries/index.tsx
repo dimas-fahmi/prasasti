@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { StandardizedError } from "../errors";
 import { getRecentNotes } from "@/src/db/idb/actions/getRecentNotes";
+import { getNote } from "@/src/db/idb/actions/getNote";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +23,12 @@ export const queryClient = new QueryClient({
 
 export const queries = {
   notes: {
+    note: (id: string) => {
+      return {
+        queryKey: ["notes", id],
+        queryFn: () => getNote(id),
+      };
+    },
     recents: () => {
       return {
         queryKey: ["notes", "recents"],

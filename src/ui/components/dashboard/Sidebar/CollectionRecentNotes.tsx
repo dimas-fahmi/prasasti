@@ -13,7 +13,9 @@ const CollectionRecentNotes = () => {
   return (
     <>
       {isValid &&
-        notes.map((item) => <NoteButton key={item?.id} note={item} />)}
+        notes
+          .slice(0, 3)
+          .map((item) => <NoteButton key={item?.id} note={item} />)}
     </>
   );
 };
