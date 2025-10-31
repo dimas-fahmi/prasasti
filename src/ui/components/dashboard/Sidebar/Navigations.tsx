@@ -1,10 +1,8 @@
 import {
-  ArchiveIcon,
   ImageIcon,
   LayoutDashboard,
   type LucideIcon,
   Settings,
-  Trash,
   VideoIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -57,13 +55,6 @@ const Navigations = () => {
         icon={VideoIcon}
         href="/dashboard/videos"
       />
-
-      <NavigationItem
-        title="Archive"
-        icon={ArchiveIcon}
-        href="/dashboard/archive"
-      />
-      <NavigationItem title="Trash" icon={Trash} href="/dashboard/trash" />
       <NavigationItem
         title="Settings"
         icon={Settings}

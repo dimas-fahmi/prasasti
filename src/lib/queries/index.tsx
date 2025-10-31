@@ -4,6 +4,8 @@ import { getRecentNotes } from "@/src/db/idb/actions/getRecentNotes";
 import { getNote } from "@/src/db/idb/actions/getNote";
 import { getNotes } from "@/src/db/idb/actions/getNotes";
 import { Note } from "@/src/db/idb/schema/note";
+import { Media } from "@/src/db/idb/schema/media";
+import { getImages } from "@/src/db/idb/actions/getImages";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -70,6 +72,18 @@ export const queries = {
         queryFn: getRecentNotes,
         retry: (count, error) => {
           return handleRetry(count, error, queryKey);
+        },
+      };
+    },
+  },
+  images: {
+    all: (): UseQueryOptions<Media[], StandardizedError> => {
+      const queryKey = ["media", "images"];
+      return {
+        queryKey,
+        queryFn: getImages,
+        retry: (count, err) => {
+          return handleRetry(count, err, queryKey);
         },
       };
     },

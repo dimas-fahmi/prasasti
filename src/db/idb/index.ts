@@ -5,13 +5,13 @@ import { Note } from "./schema/note";
 
 const db_dexie = new Dexie("main") as Dexie & {
   metadata: EntityTable<PrasastiMetadata, "id">;
-  medias: EntityTable<Media, "id">;
+  media: EntityTable<Media, "id">;
   notes: EntityTable<Note, "id">;
 };
 
 db_dexie.version(1).stores({
   metadata: "&id",
-  medias: "&id,name,createdAt,deletedAt",
+  media: "&id,name,createdAt,deletedAt,type",
   notes: "&id,title,createdAt,updatedAt,lastOpenedAt,deletedAt",
 });
 

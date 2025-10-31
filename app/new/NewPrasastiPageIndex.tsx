@@ -24,6 +24,8 @@ import { useInsertMetadata } from "@/src/db/idb/hooks/useInsertMetadata";
 import { useGetMetadata } from "@/src/db/idb/hooks/useGetMetadata";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Media } from "@/src/db/idb/schema/media";
+import { useInsertBulkMedia } from "@/src/db/idb/hooks/useInsertBulkMedia";
 
 const metadataSchema = z.object({
   name: z.string().min(1),
@@ -66,6 +68,9 @@ const NewPrasastiPageIndex = () => {
     },
   });
 
+  const { mutate: insertMedia, isPending: isInsertingMedia } =
+    useInsertBulkMedia();
+
   return (
     <div className="min-h-screen md:min-w-md lg:min-w-lg py-16 bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl">
@@ -83,6 +88,30 @@ const NewPrasastiPageIndex = () => {
               if (!validation.success) return;
 
               // Construct Metadata
+
+              const images = [
+                "https://picsum.photos/seed/1/400/600",
+                "https://picsum.photos/seed/2/400/800",
+                "https://picsum.photos/seed/3/400/500",
+                "https://picsum.photos/seed/4/400/700",
+                "https://picsum.photos/seed/5/400/900",
+                "https://picsum.photos/seed/6/400/400",
+                "https://picsum.photos/seed/7/400/600",
+                "https://picsum.photos/seed/8/400/800",
+                "https://picsum.photos/seed/9/400/500",
+                "https://picsum.photos/seed/10/400/700",
+              ];
+
+              const media: Media[] = images.map((item) => {
+                return {
+                  id: crypto.randomUUID(),
+                  name: getRandomPrasastiName(),
+                  type: "image",
+                  payload: { type: "embed", src: item },
+                  createdAt: new Date(),
+                };
+              });
+
               const metadata: PrasastiMetadata = {
                 ...data,
                 id: crypto.randomUUID(),
@@ -90,6 +119,7 @@ const NewPrasastiPageIndex = () => {
                 owner: data?.owner || getRandomOwnerName(),
               };
 
+              insertMedia(media);
               insert(metadata);
             })}
             suppressHydrationWarning
@@ -168,7 +198,9 @@ const NewPrasastiPageIndex = () => {
                     setValue("name", getRandomPrasastiName());
                     setValue("owner", getRandomOwnerName());
                   }}
-                  disabled={isLoadingMetadata || isInserting}
+                  disabled={
+                    isLoadingMetadata || isInserting || isInsertingMedia
+                  }
                 >
                   <Dices />
                 </Button>
