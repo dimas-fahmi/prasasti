@@ -1,7 +1,7 @@
 import Navigations from "./Navigations";
 import MetadataCard from "./MetadataCard";
 import NewNoteButton from "./NewNoteButton";
-import CollectionRecentNotes from "./CollectionRecentNotes";
+import SidebarRecentNotes from "./SidebarRecentNotes";
 
 const DashboardSidebar = () => {
   return (
@@ -25,7 +25,7 @@ const DashboardSidebar = () => {
 
         <div className="space-y-2">
           {/* Collection - Recent Note */}
-          <CollectionRecentNotes />
+          <SidebarRecentNotes />
 
           {/* New Note Button */}
           <NewNoteButton />

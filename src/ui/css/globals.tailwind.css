@@ -173,6 +173,10 @@
     @apply cursor-pointer;
   }
 
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
   .flex-center {
     @apply flex justify-center items-center;
   }
@@ -180,11 +184,18 @@
   .scrollbar-none::-webkit-scrollbar {
     @apply hidden;
   }
-}
 
-html,
-body {
-  scrollbar-gutter: stable both-edges;
+  .dashboard-padding {
+    @apply p-4 md:p-12 lg:p-16;
+  }
+
+  .dashboard-heading {
+    @apply text-4xl font-header font-bold;
+  }
+
+  .note-card-size {
+    @apply min-h-50 max-h-50 min-w-48 max-w-48;
+  }
 }
 
 .empty-paragraph-element {

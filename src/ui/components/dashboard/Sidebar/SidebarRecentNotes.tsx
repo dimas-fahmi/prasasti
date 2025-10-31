@@ -3,11 +3,10 @@ import NoteButton from "./NoteButton";
 import { queries } from "@/src/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 
-const CollectionRecentNotes = () => {
+const SidebarRecentNotes = () => {
   const recentQuery = queries.notes.recents();
   const { data: notes } = useQuery({ ...recentQuery });
-
-  const isValid = notes && Array.isArray(notes) && notes.length;
+  const isValid = !!notes && Array.isArray(notes) && !!notes.length;
 
   return (
     isValid &&
@@ -30,4 +29,4 @@ const CollectionRecentNotes = () => {
   );
 };
 
-export default CollectionRecentNotes;
+export default SidebarRecentNotes;
