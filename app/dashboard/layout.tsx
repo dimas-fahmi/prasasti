@@ -3,11 +3,6 @@
 import { useGetMetadata } from "@/src/db/idb/hooks/useGetMetadata";
 import { useDashboardStore } from "@/src/lib/stores/dashboardStore";
 import DashboardSidebar from "@/src/ui/components/dashboard/Sidebar";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/src/ui/shadcn/components/ui/resizable";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 
@@ -46,28 +41,14 @@ const DashboardLayout = ({
   }, [setMainWidth]);
 
   return (
-    <ResizablePanelGroup
-      direction="horizontal"
-      className="min-h-dvh overflow-visible!"
-    >
-      {/* Sidebar */}
-      <ResizablePanel
-        className="hidden md:block overflow-visible!"
-        minSize={20}
-        maxSize={30}
-        defaultSize={20}
-      >
-        <aside className="sticky top-2 ">
+    <div className="grid grid-cols-[300px_auto] min-h-dvh">
+      <aside className="border-r">
+        <div className="sticky top-0">
           <DashboardSidebar />
-        </aside>
-      </ResizablePanel>
-
-      <ResizableHandle />
-
-      <ResizablePanel defaultSize={80}>
-        <main ref={mainRef}>{children}</main>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+        </div>
+      </aside>
+      <main ref={mainRef}>{children}</main>
+    </div>
   );
 };
 

@@ -15,7 +15,7 @@ export default function RootLayout({
     // Force Dark Mode For Now
     <html lang="en" className="dark">
       <body
-        className={`${interFont.variable} ${spaceMonoFont.variable} antialiased`}
+        className={`${interFont.variable} ${spaceMonoFont.variable} antialiased custom-scrollbar`}
       >
         <QueryClientProvider client={queryClient}>
           {children}

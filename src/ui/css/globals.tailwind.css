@@ -173,10 +173,6 @@
     @apply cursor-pointer;
   }
 
-  body::-webkit-scrollbar {
-    display: none;
-  }
-
   .flex-center {
     @apply flex justify-center items-center;
   }
@@ -209,4 +205,18 @@
   top: 0;
   left: 0;
   right: 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  width: 5px;
+  background-color: var(--muted);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--muted-foreground);
+  border-radius: var(--radius-lg);
 }
