@@ -5,7 +5,7 @@ import SidebarRecentNotes from "./SidebarRecentNotes";
 
 const DashboardSidebar = () => {
   return (
-    <div className="py-6 px-4 space-y-6">
+    <div className="py-6 sticky px-4 space-y-6">
       {/* Uptop Section */}
       <section id="dashboard-sidebar-uptop" className="space-y-6">
         {/* Metadata */}

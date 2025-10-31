@@ -46,15 +46,18 @@ const DashboardLayout = ({
   }, [setMainWidth]);
 
   return (
-    <ResizablePanelGroup direction="horizontal" className="min-h-dvh">
+    <ResizablePanelGroup
+      direction="horizontal"
+      className="min-h-dvh overflow-visible!"
+    >
       {/* Sidebar */}
       <ResizablePanel
-        className="hidden md:block"
+        className="hidden md:block overflow-visible!"
         minSize={20}
         maxSize={30}
         defaultSize={20}
       >
-        <aside>
+        <aside className="sticky top-2 ">
           <DashboardSidebar />
         </aside>
       </ResizablePanel>
