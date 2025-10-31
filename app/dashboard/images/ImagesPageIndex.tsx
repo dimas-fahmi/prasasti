@@ -8,6 +8,7 @@ import { cn } from "@/src/ui/shadcn/lib/utils";
 import { Button } from "@/src/ui/shadcn/components/ui/button";
 import { queries } from "@/src/lib/queries";
 import { useQuery } from "@tanstack/react-query";
+import { useMediaStore } from "@/src/lib/stores/mediaStore";
 
 export interface ImagePageToolbarButtonProps
   extends React.HTMLAttributes<HTMLButtonElement> {
@@ -38,6 +39,8 @@ const ToolbarButton = React.forwardRef<
 ToolbarButton.displayName = "ImagesPageToolbarButton";
 
 const ImagesPageIndex = () => {
+  const { setNewImageEmbedDialogOpen } = useMediaStore();
+
   const imagesQuery = queries.images.all();
   const { data: images, isPending: _isLoadingImages } = useQuery({
     ...imagesQuery,
@@ -54,7 +57,13 @@ const ImagesPageIndex = () => {
         {/* Toolbar */}
         <div className="mt-4 flex gap-2">
           <ToolbarButton label="Search" icon={Search} />
-          <ToolbarButton label="Embed" icon={LinkIcon} />
+          <ToolbarButton
+            label="Embed"
+            icon={LinkIcon}
+            onClick={() => {
+              setNewImageEmbedDialogOpen(true);
+            }}
+          />
           <ToolbarButton label="Import" icon={ImportIcon} />
         </div>
       </header>

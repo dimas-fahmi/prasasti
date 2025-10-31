@@ -8,5 +8,10 @@ export async function getImages() {
     throw new StandardizedError("not_found", "No images found", 404);
   }
 
-  return images;
+  return images.sort((a, b) => {
+    const timeA = new Date(a.createdAt).getTime();
+    const timeB = new Date(b.createdAt).getTime();
+
+    return timeB - timeA;
+  });
 }

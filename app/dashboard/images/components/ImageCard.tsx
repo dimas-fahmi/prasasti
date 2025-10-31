@@ -3,7 +3,6 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from "@/src/ui/shadcn/components/ui/context-menu";
-import Image from "next/image";
 import ImageCardContextMenu from "./ImageCardContextMenu";
 import { Media } from "@/src/db/idb/schema/media";
 import { cn } from "@/src/ui/shadcn/lib/utils";
@@ -24,12 +23,11 @@ const ImageCard = ({ image }: { image: Media }) => {
             mediaType !== "image" ? "hidden" : ""
           )}
         >
-          <Image
-            width={500}
-            height={500}
+          <img
             src={src}
             alt={`Image`}
             className="w-full rounded-lg shadow-md"
+            loading="lazy"
           />
         </div>
       </ContextMenuTrigger>

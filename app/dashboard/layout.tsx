@@ -2,6 +2,7 @@
 
 import { useGetMetadata } from "@/src/db/idb/hooks/useGetMetadata";
 import { useDashboardStore } from "@/src/lib/stores/dashboardStore";
+import NIED from "@/src/ui/components/dashboard/Dialogs/NewImageEmbedDialog";
 import DashboardSidebar from "@/src/ui/components/dashboard/Sidebar";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
@@ -41,14 +42,19 @@ const DashboardLayout = ({
   }, [setMainWidth]);
 
   return (
-    <div className="grid grid-cols-[300px_auto] min-h-dvh">
-      <aside className="border-r">
-        <div className="sticky top-0">
-          <DashboardSidebar />
-        </div>
-      </aside>
-      <main ref={mainRef}>{children}</main>
-    </div>
+    <>
+      <div className="grid grid-cols-1  md:grid-cols-[300px_auto] min-h-dvh">
+        <aside className="border-r hidden md:block">
+          <div className="sticky top-0">
+            <DashboardSidebar />
+          </div>
+        </aside>
+        <main ref={mainRef}>{children}</main>
+      </div>
+
+      {/* Dialog - NIED */}
+      <NIED />
+    </>
   );
 };
 
