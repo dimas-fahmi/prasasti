@@ -1,9 +1,11 @@
 import {
-  Amphora,
+  ArchiveIcon,
+  ImageIcon,
   LayoutDashboard,
   type LucideIcon,
-  Search,
+  Settings,
   Trash,
+  VideoIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -46,16 +48,27 @@ const Navigations = () => {
         href="/dashboard"
       />
       <NavigationItem
-        title="My Artifacts"
-        icon={Amphora}
-        href="/dashboard/artifacts"
+        title="My Images"
+        icon={ImageIcon}
+        href="/dashboard/images"
       />
       <NavigationItem
-        title="Search Artifacts"
-        icon={Search}
-        href="/dashboard/search"
+        title="My Videos"
+        icon={VideoIcon}
+        href="/dashboard/videos"
+      />
+
+      <NavigationItem
+        title="Archive"
+        icon={ArchiveIcon}
+        href="/dashboard/archive"
       />
       <NavigationItem title="Trash" icon={Trash} href="/dashboard/trash" />
+      <NavigationItem
+        title="Settings"
+        icon={Settings}
+        href="/dashboard/settings"
+      />
     </div>
   );
 };
