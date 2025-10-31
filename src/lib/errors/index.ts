@@ -2,7 +2,11 @@
 export type HttpStatus = 200 | 400 | 401 | 403 | 404 | 500;
 
 // Error Codes
-export type ErrorCode = "failed_insertion" | "failed_mutation" | "not_found";
+export type ErrorCode =
+  | "failed_insertion"
+  | "failed_mutation"
+  | "failed_deletion"
+  | "not_found";
 
 export interface StandardizedErrorType {
   code: ErrorCode;

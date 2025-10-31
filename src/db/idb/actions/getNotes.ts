@@ -5,7 +5,7 @@ export async function getNotes() {
   const notes = await db_dexie.notes.orderBy("createdAt").reverse().toArray();
 
   if (!notes.length) {
-    throw new StandardizedError("not_found", "No notes found", 404);
+    throw new StandardizedError("not_found", "No notes found", 404, notes);
   }
 
   return notes;

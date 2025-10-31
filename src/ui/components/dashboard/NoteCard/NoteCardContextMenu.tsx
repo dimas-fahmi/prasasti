@@ -1,3 +1,6 @@
+"use client";
+
+import { useDeleteNote } from "@/src/db/idb/hooks/useDeleteNote";
 import { Note } from "@/src/db/idb/schema/note";
 import {
   ContextMenuCheckboxItem,
@@ -10,6 +13,8 @@ import {
 import Link from "next/link";
 
 const NoteCardContextMenu = ({ note }: { note: Note }) => {
+  const { mutate: deleteNote, isPending: isDeletingNote } = useDeleteNote();
+
   return (
     <>
       <ContextMenuItem inset asChild>
@@ -32,7 +37,15 @@ const NoteCardContextMenu = ({ note }: { note: Note }) => {
           <ContextMenuItem disabled>Edit Thumbnail</ContextMenuItem>
         </ContextMenuSubContent>
       </ContextMenuSub>
-      <ContextMenuItem inset variant="destructive">
+      <ContextMenuItem
+        inset
+        variant="destructive"
+        onClick={() => {
+          if (isDeletingNote) return;
+          deleteNote(note.id);
+        }}
+        disabled={isDeletingNote}
+      >
         Delete
       </ContextMenuItem>
     </>

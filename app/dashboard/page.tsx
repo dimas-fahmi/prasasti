@@ -9,12 +9,7 @@ export const metadata: Metadata = {
 
 const DashboardPage = () => {
   return (
-    <div className="dashboard-padding space-y-6">
-      {/* Header */}
-      <header>
-        <h1 className="dashboard-heading">Recent Notes</h1>
-      </header>
-
+    <div>
       {/* Recent Notes Card */}
       <DashboardRecentNotes />
 
